@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Projetos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="logo">Algum nome</div>
+        <div class="links">
+            <a href="/">DASHBOARD</a>
+            <a href="/projetos">PROJETOS</a>
+            <button class="sair">Sair</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="avaliacoes">
+            <h3>Projetos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome do Projeto</th>
+                        <th>Responsável</th>
+                        <th style="text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1</td>
+                        <td></td>
+                        <td></td>
+                        <td class="acoes">
+                            <button class="editar">Visualizar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="#">Sobre</a>
+        <a href="#">Contato</a>
+        <a href="#">GitHub</a>
+    </div>
+
+</body>
+
+</html>

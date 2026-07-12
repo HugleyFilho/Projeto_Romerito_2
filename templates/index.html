@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>inicio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="logo">Algum nome</div>
+        <div class="links">
+            <a href="/">DASHBOARD</a>
+            <a href="/projetos">PROJETOS</a>
+            <button class="sair">Sair</button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="layout">
+            <div class="filtros">
+                <h3>Filtros</h3>
+                <input type="text" placeholder="Busca por Projeto">
+                <button class="filtrar">Filtrar</button>
+            </div>
+
+            <div>
+                <h3>Projetos Recentes</h3>
+                <div class="grid">
+
+                    <div class="card">
+                        <div class="topo">
+                            <strong>Projeto:</strong>
+                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
+                        </div>
+                        <p>Descrição:</p>
+                        <p>Avaliações:</p>
+                        <div class="rodape">
+                            <button class="avaliar">Avaliar</button>
+                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="topo">
+                            <strong>Projeto:</strong>
+                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
+                        </div>
+                        <p>Descrição:</p>
+                        <p>Avaliações:</p>
+                        <div class="rodape">
+                            <button class="avaliar">Avaliar</button>
+                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="topo">
+                            <strong>Projeto:</strong>
+                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
+                        </div>
+                        <p>Descrição:</p>
+                        <p>Avaliações:</p>
+                        <div class="rodape">
+                            <button class="avaliar">Avaliar</button>
+                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="topo">
+                            <strong>Projeto:</strong>
+                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
+                        </div>
+                        <p>Descrição:</p>
+                        <p>Avaliações:</p>
+                        <div class="rodape">
+                            <button class="avaliar">Avaliar</button>
+                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="avaliacoes">
+            <h3>Minhas Avaliações</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Projeto</th>
+                        <th>Comentário</th>
+                        <th style="text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="acoes">
+                            <button class="editar">Editar</button>
+                            <button class="deletar">Deletar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="#">Sobre</a>
+        <a href="#">Contato</a>
+        <a href="#">GitHub</a>
+    </div>
+
+</body>
+
+</html>
