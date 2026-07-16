@@ -1,122 +1,285 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
+{% block title %}DevReview — Dashboard{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>inicio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% block content %}
+<div class="app">
 
-<body>
+    <aside class="sidebar">
+        <div class="logo">Dev<span>Review</span></div>
 
-    <div class="navbar">
-        <div class="logo">Algum nome</div>
-        <div class="links">
-            <a href="/">DASHBOARD</a>
-            <a href="/projetos">PROJETOS</a>
-            <button class="sair">Sair</button>
+        <nav class="menu">
+            <a href="{{ url_for('index') }}" class="menu-item ativo">
+                <span class="menu-icone">&#9635;</span> Dashboard
+            </a>
+        </nav>
+
+        <div class="projetos-sidebar">
+            <p class="projetos-sidebar-titulo">Meus projetos</p>
+            {% for projeto in meus_projetos %}
+                <div class="projetos-sidebar-item-container">
+                    <div class="card-acoes" style="margin-left: 10px; gap: 6px;">
+                        <button type="button" class="icone-btn" title="Editar"
+                                data-open-modal="modal-editar-projeto-{{ projeto.id }}">&#9998;</button>
+                        <button type="button" class="icone-btn icone-perigo" title="Excluir"
+                                data-open-modal="modal-deletar-projeto-{{ projeto.id }}">&#128465;</button>
+                    </div>
+                    
+                    <a href="#" class="projetos-sidebar-item">{{ projeto.nome }}</a>
+                </div>
+            {% else %}
+                <p class="projetos-sidebar-vazio">Você ainda não criou nenhum projeto.</p>
+            {% endfor %}
         </div>
-    </div>
 
-    <div class="container">
-
-        <div class="layout">
-            <div class="filtros">
-                <h3>Filtros</h3>
-                <input type="text" placeholder="Busca por Projeto">
-                <button class="filtrar">Filtrar</button>
-            </div>
-
+        <div class="usuario-logado" style="margin-bottom: 14px;">
+            <div class="avatar">{{ current_user.nome[0]|upper }}</div>
             <div>
-                <h3>Projetos Recentes</h3>
-                <div class="grid">
+                <strong>{{ current_user.nome }}</strong>
+            </div>
+        </div>
 
-                    <div class="card">
-                        <div class="topo">
-                            <strong>Projeto:</strong>
-                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
-                        </div>
-                        <p>Descrição:</p>
-                        <p>Avaliações:</p>
-                        <div class="rodape">
-                            <button class="avaliar">Avaliar</button>
-                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
-                        </div>
-                    </div>
+        <form class="sair-form" method="GET" action="{{ url_for('logout') }}">
+            <button type="submit" class="sair">
+                <span class="menu-icone">&#8630;</span> Sair
+            </button>
+        </form>
+    </aside>
 
-                    <div class="card">
-                        <div class="topo">
-                            <strong>Projeto:</strong>
-                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
-                        </div>
-                        <p>Descrição:</p>
-                        <p>Avaliações:</p>
-                        <div class="rodape">
-                            <button class="avaliar">Avaliar</button>
-                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
-                        </div>
-                    </div>
+    <main class="conteudo">
 
-                    <div class="card">
-                        <div class="topo">
-                            <strong>Projeto:</strong>
-                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
-                        </div>
-                        <p>Descrição:</p>
-                        <p>Avaliações:</p>
-                        <div class="rodape">
-                            <button class="avaliar">Avaliar</button>
-                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
-                        </div>
-                    </div>
+        <div class="topo-pagina">
+            <h1>Projetos</h1>
+        </div>
 
-                    <div class="card">
-                        <div class="topo">
-                            <strong>Projeto:</strong>
-                            <img src="{{ url_for('static', filename='pontos.png') }}" alt="Menu" class="pontos">
-                        </div>
-                        <p>Descrição:</p>
-                        <p>Avaliações:</p>
-                        <div class="rodape">
-                            <button class="avaliar">Avaliar</button>
-                            <img src="{{ url_for('static', filename='pessoa.png') }}" alt="User" class="usuario">
-                        </div>
-                    </div>
+        <section class="secao">
+            <div class="secao-cabecalho">
+                <h2>Projetos recentes</h2>
 
+                <div class="botoes-topo">
+                    <form class="filtros" method="GET" action="{{ url_for('index') }}">
+                        <input type="text" name="q" placeholder="Busca por projeto" value="{{ busca }}">
+                        <button type="submit">Filtrar</button>
+                    </form>
+                    <button type="button" class="btn-primario" data-open-modal="modal-novo-projeto">+ Novo projeto</button>
                 </div>
             </div>
-        </div>
 
-        <div class="avaliacoes">
-            <h3>Minhas Avaliações</h3>
+            {% if projetos %}
+                <div class="grid-projetos">
+                    {% for projeto in projetos %}
+                        <div class="card">
+                            <div class="card-topo">
+                                <h3>{{ projeto.nome }}</h3>
+
+                                {% if projeto.usuario_id == current_user.id %}
+                                    <div class="card-acoes">
+                                        <button type="button" class="icone-btn" title="Editar"
+                                                data-open-modal="modal-editar-projeto-{{ projeto.id }}">&#9998;</button>
+                                        <button type="button" class="icone-btn icone-perigo" title="Excluir"
+                                                data-open-modal="modal-deletar-projeto-{{ projeto.id }}">&#128465;</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <p class="card-descricao">{{ projeto.descricao or "Sem descrição." }}</p>
+
+                            <div class="card-rodape">
+                                <span class="nota"><span>&#9733;</span> {{ projeto.media_avaliacoes }} ({{ projeto.avaliacoes|length }})</span>
+                                <button type="button" class="btn-secundario btn-pequeno"
+                                        data-open-modal="modal-avaliar-{{ projeto.id }}">Avaliar</button>
+                            </div>
+
+                            <span class="card-autor">por {{ projeto.autor.nome }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="vazio">
+                    {% if busca %}
+                        Nenhum projeto encontrado para "{{ busca }}".
+                    {% else %}
+                        Nenhum projeto cadastrado ainda. Clique em "Novo projeto" para começar.
+                    {% endif %}
+                </p>
+            {% endif %}
+        </section>
+
+        <section class="secao">
+            <div class="secao-cabecalho">
+                <h2>Minhas avaliações</h2>
+            </div>
+
             <table>
                 <thead>
                     <tr>
                         <th>Projeto</th>
                         <th>Comentário</th>
+                        <th>Nota</th>
                         <th style="text-align: right;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td class="acoes">
-                            <button class="editar">Editar</button>
-                            <button class="deletar">Deletar</button>
-                        </td>
-                    </tr>
+                    {% for avaliacao in avaliacoes %}
+                        <tr>
+                            <td>{{ avaliacao.projeto.nome }}</td>
+                            <td>{{ avaliacao.comentario }}</td>
+                            <td>{{ avaliacao.nota }}</td>
+                            <td class="acoes">
+                                <button type="button" class="btn-secundario btn-pequeno"
+                                        data-open-modal="modal-editar-avaliacao-{{ avaliacao.id }}">Editar</button>
+                                <button type="button" class="btn-perigo btn-pequeno"
+                                        data-open-modal="modal-deletar-avaliacao-{{ avaliacao.id }}">Deletar</button>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="vazio">Você ainda não avaliou nenhum projeto.</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
+        </section>
+
+    </main>
+</div>
+
+
+<div class="modal-overlay" id="modal-novo-projeto">
+    <div class="modal-box">
+        <div class="modal-cabecalho">
+            <h3>Novo projeto</h3>
+            <button type="button" class="modal-fechar" data-close-modal>&times;</button>
+        </div>
+        <form method="POST" action="{{ url_for('criar_projeto') }}">
+            <label>Nome
+                <input type="text" name="nome" required autofocus>
+            </label>
+            <label>Descrição
+                <textarea name="descricao"></textarea>
+            </label>
+            <div class="modal-acoes">
+                <button type="button" class="btn-secundario" data-close-modal>Cancelar</button>
+                <button type="submit" class="btn-primario">Salvar projeto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% for projeto in projetos %}
+
+    {% if projeto.usuario_id == current_user.id %}
+    <div class="modal-overlay" id="modal-editar-projeto-{{ projeto.id }}">
+        <div class="modal-box">
+            <div class="modal-cabecalho">
+                <h3>Editar projeto</h3>
+                <button type="button" class="modal-fechar" data-close-modal>&times;</button>
+            </div>
+            <form method="POST" action="{{ url_for('editar_projeto', projeto_id=projeto.id) }}">
+                <label>Nome
+                    <input type="text" name="nome" value="{{ projeto.nome }}" required>
+                </label>
+                <label>Descrição
+                    <textarea name="descricao">{{ projeto.descricao or "" }}</textarea>
+                </label>
+                <div class="modal-acoes">
+                    <button type="button" class="btn-secundario" data-close-modal>Cancelar</button>
+                    <button type="submit" class="btn-primario">Salvar alterações</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div class="footer">
-        <a href="#">Sobre</a>
-        <a href="#">Contato</a>
-        <a href="#">GitHub</a>
+    <div class="modal-overlay" id="modal-deletar-projeto-{{ projeto.id }}">
+        <div class="modal-box">
+            <div class="modal-cabecalho">
+                <h3>Excluir projeto</h3>
+                <button type="button" class="modal-fechar" data-close-modal>&times;</button>
+            </div>
+            <p class="modal-texto-aviso">
+                Tem certeza que deseja excluir <strong>{{ projeto.nome }}</strong>? Essa ação também remove as avaliações desse projeto e não pode ser desfeita.
+            </p>
+            <form method="POST" action="{{ url_for('deletar_projeto', projeto_id=projeto.id) }}">
+                <div class="modal-acoes">
+                    <button type="button" class="btn-secundario" data-close-modal>Cancelar</button>
+                    <button type="submit" class="btn-perigo">Excluir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="modal-overlay" id="modal-avaliar-{{ projeto.id }}">
+        <div class="modal-box">
+            <div class="modal-cabecalho">
+                <h3>Avaliar "{{ projeto.nome }}"</h3>
+                <button type="button" class="modal-fechar" data-close-modal>&times;</button>
+            </div>
+            <form method="POST" action="{{ url_for('criar_avaliacao', projeto_id=projeto.id) }}">
+                <label>Nota
+                    <select name="nota">
+                        <option value="5">5 - Excelente</option>
+                        <option value="4">4 - Muito bom</option>
+                        <option value="3">3 - Bom</option>
+                        <option value="2">2 - Regular</option>
+                        <option value="1">1 - Ruim</option>
+                    </select>
+                </label>
+                <label>Comentário
+                    <textarea name="comentario" required></textarea>
+                </label>
+                <div class="modal-acoes">
+                    <button type="button" class="btn-secundario" data-close-modal>Cancelar</button>
+                    <button type="submit" class="btn-primario">Enviar avaliação</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-</body>
+{% endfor %}
 
-</html>
+{% for avaliacao in avaliacoes %}
+
+    <div class="modal-overlay" id="modal-editar-avaliacao-{{ avaliacao.id }}">
+        <div class="modal-box">
+            <div class="modal-cabecalho">
+                <h3>Editar avaliação</h3>
+                <button type="button" class="modal-fechar" data-close-modal>&times;</button>
+            </div>
+            <form method="POST" action="{{ url_for('editar_avaliacao', avaliacao_id=avaliacao.id) }}">
+                <label>Nota
+                    <select name="nota">
+                        {% for valor in [5, 4, 3, 2, 1] %}
+                            <option value="{{ valor }}" {% if avaliacao.nota == valor %}selected{% endif %}>{{ valor }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Comentário
+                    <textarea name="comentario" required>{{ avaliacao.comentario }}</textarea>
+                </label>
+                <div class="modal-acoes">
+                    <button type="button" class="btn-secundario" data-close-modal>Cancelar</button>
+                    <button type="submit" class="btn-primario">Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-deletar-avaliacao-{{ avaliacao.id }}">
+        <div class="modal-box">
+            <div class="modal-cabecalho">
+                <h3>Excluir avaliação</h3>
+                <button type="button" class="modal-fechar" data-close-modal>&times;</button>
+            </div>
+            <p class="modal-texto-aviso">Tem certeza que deseja excluir essa avaliação? Essa ação não pode ser desfeita.</p>
+            <form method="POST" action="{{ url_for('deletar_avaliacao', avaliacao_id=avaliacao.id) }}">
+                <div class="modal-acoes">
+                    <button type="button" class="btn-secundario" data-close-modal>Cancelar</button>
+                    <button type="submit" class="btn-perigo">Excluir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endfor %}
+
+{% endblock %}

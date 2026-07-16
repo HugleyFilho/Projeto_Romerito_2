@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<div class="pagina-auth">
+    <div class="cartao-auth">
+        <h1>Bem-vindo de volta</h1>
+        <p class="subtitulo">Entre com sua conta para acessar seus projetos.</p>
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <label>E-mail
+                <input type="email" name="email" value="{{ email or '' }}" required autofocus>
+            </label>
+            <label>Senha
+                <input type="password" name="senha" required>
+            </label>
+            <button type="submit">Entrar</button>
+        </form>
+
+        <p class="rodape-auth">Ainda não tem conta? <a href="{{ url_for('registro') }}">Cadastre-se</a></p>
+    </div>
+</div>
+{% endblock %}
